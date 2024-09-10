@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gezeichnet</title>
+    <!-- Pico.css (Classless version) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+
+    <header> <h1>
+      <p>Was hat meine Efeutute?</p>
+    </h1><p id="additional-text">Lade ein Bild der Efeututenblätter hoch, um mehr über den Zustand deiner Pflanze zu erfahren.</p></header>
+    <input type="file" id="file">
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@latest/lib/addons/p5.dom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ml5@latest/dist/ml5.min.js"></script>
+    <script type="text/javascript">
+      // Classifier Variable
+      let classifier;
+      // Model URL
+      let imageModelURL = 'https://teachablemachine.withgoogle.com/models/0ugZe5kyc/';
+      
+      // Video
+      // let video;
+      // let flippedVideo;
+      // To store the classification
+      let label = "";
+      
+      let input;
+      
+      /**
+       * Taken from the p5.js source
+       * https://github.com/processing/p5.js/blob/cdd98d02fc4a96bf819a5b000779889e8bb842f9/src/dom/dom.js#L2028
+       */
+      function fileSelectHandler(event) {
+        for (const file of event.target.files) {
+          p5.File._load(file, fileHandler);
+        }
+      }
+      
+      function fileHandler(file) {
+        
+        if (file.type === "image") {
+          // we can load the image into an DOM img element
+          console.log("it was an image file");
+          const imgElt = createImg(file.data, "");
+          imgElt.hide();
+          // but we can also load it into a p5.Image
+          loadImage(file.data, (image) => {
+            console.log("image data loaded into p5.Image");
+            classifier.classify(image, gotResult);
+            
+          });
+        }
+      }
+      
+      
+      function preload() {
+        // Load the model first
+        classifier = ml5.imageClassifier(imageModelURL + 'model.json');
+      }
+      
+      function setup() {
+        noCanvas();
+        input = select("#file");
+        
+        if(!input){
+          throw new Error("Could not find input element");
+        }
+        input.elt.addEventListener("change", fileSelectHandler, false);
+      }
+      
+      function draw() {
+        
+      }
+      
+      // Get a prediction for the current video frame
+      
+      
+      // When we get a result
+      function gotResult(error, results) {
+        // If there is an error
+        if (error) {
+          console.error(error);
+          return;
+        }
+        // The results are in an array ordered by confidence.
+        console.log(results[0]);
+        label = results[0].label;
+        location.href = `/result.html?label=${label}`;
+        // Classifiy again!
+        
+      }
+      </script>
+    
+    
+    
+    
+    <!-- <img id="background-image" src="gezeichnetefeu.png" alt="Hintergrundbild"> -->
+    
+  </main>
+
+  </body>
+  </html>

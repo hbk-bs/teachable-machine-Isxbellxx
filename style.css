@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nimbus Mono PS', 'Courier New', 'monospace',sans-serif;
+  }
+html{
+    font-size: 18px;
+}
+h1 {
+    font-size: 36px; /* Ändere die Schriftgröße der Überschrift */
+    text-align: center !important;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100vh;
+    margin: 0 auto;
+    
+    background: url(efeutute.png) no-repeat center bottom fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-color: #6D9077;
+  }
+
+  main {
+    flex: 1; 
+  }
+  .hidden {
+    display: none;
+}
